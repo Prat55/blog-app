@@ -28,15 +28,28 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+
+    protected function random_Token()
+    {
+        do {
+            $token = substr(md5(mt_rand()), 0, 30);
+        } while (User::where("userID", "=", $token)->first());
+
+        return $token;
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $uid = $this->random_Token();
+
         $user = User::create([
+            'userID' => $uid,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),

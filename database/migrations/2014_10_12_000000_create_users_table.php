@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('userID', 50);
             $table->string('name');
             $table->string('email')->unique();
             $table->string('role')->default('user');

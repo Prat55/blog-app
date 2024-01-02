@@ -5,7 +5,7 @@ namespace App\Http\Controllers\blog;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
 
 class BlogController extends Controller
 {
@@ -22,6 +22,7 @@ class BlogController extends Controller
     protected function addBlog(Request $request)
     {
         $request->validate([
+            'blog_title' => 'required|max:50|min:5',
             'blog_description' => 'required|min:150',
             'coverimg' => 'required|max:7500|mimes:png,jpg,jpeg,gif,svg,webp',
         ]);
@@ -34,11 +35,12 @@ class BlogController extends Controller
             $coverimg->move(\public_path("blog_images/"), $imageName);
 
             $newBlog = Blog::create([
+                'userID' => Auth::user()->userID,
                 'blog_uid' => $uid,
+                'blog_title' => $request->blog_title,
                 'blog_description' => $request->blog_description,
                 'cover_img' => $imageName,
             ]);
-            $newBlog->save();
 
             if ($newBlog) {
                 return back()->with('success', 'Blog posted successfully');
