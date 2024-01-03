@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Redirect;
 
 class BlogController extends Controller
 {
@@ -47,6 +49,31 @@ class BlogController extends Controller
             } else {
                 return back()->with('error', 'Something went wrong! Please try again');
             }
+        }
+    }
+
+    protected function destroy($uid)
+    {
+        $blog = Blog::where('blog_uid', $uid)->first();
+        if ($blog->userID === Auth::user()->userID) {
+            if (file::exists("blog_images/" . $blog->cover_img)) {
+                File::delete("blog_images/" . $blog->cover_img);
+            }
+            $blog->delete();
+
+            return Redirect::route('dashboard')->with('success', 'Blog deleted successfully');
+        } else {
+            return Redirect::route('dashboard')->with('error', "You doesn't have access to do this!");
+        }
+    }
+
+    protected function read_more($uid)
+    {
+        $blog = Blog::where('blog_uid', $uid)->first();
+        if ($blog->userID === Auth::user()->userID) {
+            return view('blog.read-more', compact('blog'));
+        } else {
+            return Redirect::route('dashboard')->with('error', "You don't have access to do this!");
         }
     }
 }

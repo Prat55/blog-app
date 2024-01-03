@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendRegisterUserMail;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -55,10 +56,14 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        $mailData = [
+            'name' => $request->name,
+        ];
         event(new Registered($user));
 
         Auth::login($user);
 
+        dispatch(new SendRegisterUserMail($request->email, $mailData));
         return redirect(RouteServiceProvider::HOME);
     }
 }

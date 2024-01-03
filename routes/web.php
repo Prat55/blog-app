@@ -3,6 +3,7 @@
 use App\Http\Controllers\blog\BlogController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Blog;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,7 +22,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    $blogs = Blog::all();
+    $blogs = Blog::where('userID', Auth::user()->userID)->latest()->paginate(9);
     return view('dashboard', compact('blogs'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -33,6 +34,8 @@ Route::middleware('auth')->group(function () {
 
     // ? Blog routes
     Route::post('/add-blog', [BlogController::class, 'addBlog'])->name('blog.add');
+    Route::get('/blog/full/{token}', [BlogController::class, 'read_more']);
+    Route::delete('/blog/delete/{uid}', [BlogController::class, 'destroy']);
 });
 
 require __DIR__ . '/auth.php';

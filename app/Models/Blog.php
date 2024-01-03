@@ -15,4 +15,9 @@ class Blog extends Model
         'blog_description',
         'cover_img',
     ];
+
+    protected function user()
+    {
+        return $this->belongsTo(User::class, 'userID', 'userID');
+    }
 }

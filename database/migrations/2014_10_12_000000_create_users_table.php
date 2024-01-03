@@ -16,9 +16,12 @@ return new class extends Migration
             $table->string('userID', 50);
             $table->string('name');
             $table->string('email')->unique();
+            $table->text('profile_img')->nullable();
             $table->string('role')->default('user');
             $table->string('mode')->default('light');
+            $table->integer('phone')->nullable();
             $table->string('status')->default('active');
+            $table->integer('suspicious_count')->default('0');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

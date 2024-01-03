@@ -6,9 +6,29 @@
     </x-slot>
 
 
-
     <div class="py-12">
         <div class="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
+            <div class="flex items-center w-full p-5 bg-white rounded justify-evenly dark:bg-gray-800">
+                <div class="w-[150px] h-[150px] flex justify-center items-center object-cover overflow-hidden relative">
+                    <img src="/profile_img/{{ Auth::user()->profile_img ?: 'profile.png' }}" alt="profile_image"
+                        class="object-cover w-full h-full border border-black rounded-full dark:border-white ">
+
+                    <i class="absolute bottom-2 right-5 fa fa-camera profile_change"
+                        style="color: grey; font-size: 1.5rem" title="change profile image"></i>
+
+                    <div class="hidden">
+                        <input type="file" name="profile_image" id="profile_image">
+                    </div>
+
+                </div>
+
+                <div class="text-white">
+                    <h4>Name: {{ Auth::user()->name }}</h4>
+                    <h6>Email: {{ Auth::user()->email }}</h6>
+                    <h6>Phone: {{ Auth::user()->phone }}</h6>
+                </div>
+            </div>
+
             @if (!Auth::user()->email_verified_at)
                 <div class="p-4 bg-white shadow sm:p-8 dark:bg-gray-800 sm:rounded-lg">
                     <section>
@@ -69,3 +89,9 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    $('.profile_change').click(function() {
+        $('#profile_image').click();
+    });
+</script>

@@ -3,7 +3,7 @@
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
                 <div class="relative p-6 text-gray-900 dark:text-gray-100">
-                    <div class="absolute text-green-600 right-[40px] top-[38px]">
+                    <div class="absolute text-green-600 right-[20px] top-7">
                         @include('message')
                     </div>
 
@@ -67,39 +67,60 @@
             </div>
 
             {{-- ?Blogs --}}
-            <div class="w-full mt-[50px] flex gap-10">
+            <div class="w-full mt-[50px] flex gap-8 flex-wrap">
                 @forelse ($blogs as $blog)
-                    @if ($blog->userID === Auth::user()->userID)
-                        <div
-                            class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                            <a href="#" class="">
-                                <img class="object-cover rounded-t-lg h-[188px] w-full"
-                                    src="/blog_images/{{ $blog->cover_img }}" alt="" />
+                    <div
+                        class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                        <a href="#" class="">
+                            <img class="object-cover rounded-t-lg h-[188px] w-full"
+                                src="/blog_images/{{ $blog->cover_img }}" alt="" />
+                        </a>
+                        <div class="p-5">
+                            <a href="#">
+                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                    {{ $blog->blog_title }}</h5>
                             </a>
-                            <div class="p-5">
-                                <a href="#">
-                                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                        {{ $blog->blog_title }}</h5>
-                                </a>
-                                <p
-                                    class="overflow-hidden mb-3 font-normal text-gray-700 dark:text-gray-400 w-[100%] text-ellipsis whitespace-nowrap p-[10px]">
-                                    {{ $blog->blog_description }}
-                                </p>
-                                <a href="/blog/full/{{ $blog->blog_uid }}"
-                                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                    Read more
-                                    <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                    </svg>
-                                </a>
 
-                                <x-danger-button x-data=""
-                                    x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">{{ __('Delete Blog') }}</x-danger-button>
+                            <p
+                                class="overflow-hidden font-normal text-gray-700 dark:text-gray-400 w-[100%] text-ellipsis whitespace-nowrap p-[10px]">
+                                {{ $blog->blog_description }}
+                            </p>
 
-                                <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-                                    <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
+                            @php
+                                $time = $blog->updated_at->diffForHumans();
+                            @endphp
+                            <h6 class="mb-2 text-white text-end">-&nbsp;{{ $time }}</h6>
+
+                            <a href="/blog/full/{{ $blog->blog_uid }}"
+                                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                Read more
+                                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                </svg>
+                            </a>
+
+                            <button data-modal-target="delete-blog" data-modal-toggle="delete-blog"
+                                class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-red-600 border border-transparent rounded-md hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+                                type="button">
+                                Delete &nbsp;
+                                <i class="fa fa-trash"></i>
+                            </button>
+
+
+                        </div>
+                    </div>
+
+                    {{-- ? <!--Blog Delete modal --> --}}
+                    <div id="delete-blog" tabindex="-1" aria-hidden="true"
+                        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <div class="relative w-full max-w-2xl max-h-full p-4">
+                            {{-- ! <!-- Modal content --> --}}
+                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                {{-- ? <!-- Modal body --> --}}
+                                <div class="p-4 space-y-4 md:p-5">
+                                    <form method="post" action="/blog/delete/{{ $blog->blog_uid }}" class="p-6">
                                         @csrf
                                         @method('delete')
 
@@ -112,30 +133,29 @@
                                         </p>
 
                                         <div class="flex justify-center mt-6">
-                                            <x-secondary-button x-on:click="$dispatch('close')">
-                                                {{ __('Cancel') }}
-                                            </x-secondary-button>
+                                            <button data-modal-hide="delete-blog" type="button"
+                                                class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-gray-700 uppercase transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 dark:border-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25">
+                                                Cancel
+                                            </button>
 
                                             <x-danger-button class="ms-3">
-                                                {{ __('Delete Account') }}
+                                                {{ __('Delete Blog') }}
                                             </x-danger-button>
                                         </div>
                                     </form>
-                                </x-modal>
+                                </div>
                             </div>
                         </div>
-                    @else
-                        <div class="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
-                            Write your first blog.
-                        </div>
-                    @endif
+                    </div>
                 @empty
-                    <div class="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
-                        <div class="relative p-6 text-center text-gray-900 dark:text-gray-100">
-                            Write your first blog.
-                        </div>
+                    <div class="overflow-hidden text-white sm:rounded-lg">
+                        Write your first blog...
                     </div>
                 @endforelse
+            </div>
+
+            <div class="mt-5">
+                {{ $blogs->links() }}
             </div>
         </div>
     </div>

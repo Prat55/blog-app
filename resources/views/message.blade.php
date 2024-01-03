@@ -1,5 +1,5 @@
 @if (Session::has('success'))
-    <div class="alert alert-success solid alert-dismissible fade show">
+    <div class="p-3 text-white bg-green-800 rounded-xl">
         <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
             stroke-linecap="round" stroke-linejoin="round" class="me-2" style="display:inline-block">
             <polyline points="9 11 12 14 22 4"></polyline>
@@ -12,7 +12,7 @@
 @endif
 
 @if (Session::has('error'))
-    <div class="alert alert-danger solid alert-dismissible fade show">
+    <div class="p-3 text-white bg-red-800 rounded-xl">
         <svg viewBox="0 0 24 24" width="24 " height="24" stroke="currentColor" stroke-width="2" fill="none"
             stroke-linecap="round" stroke-linejoin="round" class="me-2" style="display:inline-block">
             <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon>
