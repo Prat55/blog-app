@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="py-12">
-        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
                 <div class="relative p-6 text-gray-900 dark:text-gray-100">
                     <div class="absolute text-green-600 right-[20px] top-7">
@@ -67,7 +67,7 @@
             </div>
 
             {{-- ?Blogs --}}
-            <div class="w-full mt-[50px] flex gap-8 flex-wrap">
+            <div class="w-full mt-[50px] flex md:gap-8 gap-4 flex-wrap md:justify-start justify-center">
                 @forelse ($blogs as $blog)
                     <div
                         class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">

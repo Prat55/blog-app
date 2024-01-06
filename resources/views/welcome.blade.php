@@ -1,10 +1,10 @@
 <x-app-layout>
     <div class="flex flex-col justify-center w-full gap-10 overflow-hidden bg-white dark:bg-gray-900">
-        <div class="py-5 px-[10%] flex justify-between gap-2">
+        <div class="py-5 md:px-[10%] flex md:justify-between gap-2 flex-col-reverse lg:flex-row px-4">
             <div class="">
                 @forelse ($blogs as $blog)
-                    <div class="flex ">
-                        <div class="p-4 mb-4 text-white bg-white shadow sm:p-8 dark:bg-gray-800 sm:rounded-lg">
+                    <div class="flex">
+                        <div class="p-4 mb-4 text-white bg-white rounded-lg shadow sm:p-8 dark:bg-gray-800">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-2xl font-bold">{{ $blog->blog_title }}</h3>
                                 @php
@@ -21,7 +21,7 @@
                                 </span>
                             </div>
                             <div class="py-2 overflow-hidden shadow rounded-[10px] h-[200px]">
-                                <img src="/blog_images/{{ $blog->cover_img }}" alt="blog_images">
+                                <img src="/blog_images/{{ $blog->cover_img }}" alt="blog_images" class="">
                             </div>
                             <div class="py-2 h-[200px] overflow-hidden relative">
                                 <p class="text-justify">{{ $blog->blog_description }}</p>
@@ -43,8 +43,8 @@
                 @endforelse
             </div>
 
-            <div class="py-5 text-white bg-white shadow sm:p-8 dark:bg-gray-800 sm:rounded-lg h-fit">
-                <h3 class="text-black dark:text-white">Our popular blogs</h3>
+            <div class="p-4 py-5 text-white bg-white rounded-lg shadow sm:p-8 dark:bg-gray-800 h-fit">
+                <h3 class="text-xl font-bold text-black dark:text-white">Our popular blogs</h3>
 
                 <div class="w-full">
                     @forelse ($populars as $blog)

@@ -7,7 +7,7 @@
                     @method('put')
 
                     <div class="relative p-6 text-gray-900 dark:text-gray-100">
-                        <div class="box-border flex justify-between">
+                        <div class="box-border flex items-center justify-between">
                             <div>
                                 <h2 class="text-2xl font-semibold text-gray-600 dark:text-white" id="blog_old_title">
                                     {{ $blog->blog_title }}
