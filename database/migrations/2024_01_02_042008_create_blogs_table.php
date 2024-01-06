@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('blog_uid', 50);
             $table->string('blog_title', 50);
             $table->text('blog_description');
+            $table->string('type')->default('normal');
             $table->text('cover_img');
             $table->timestamps();
         });

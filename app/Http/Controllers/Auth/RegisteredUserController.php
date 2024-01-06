@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Console\Scheduling\Schedule;
 
 class RegisteredUserController extends Controller
 {
@@ -39,7 +40,7 @@ class RegisteredUserController extends Controller
         return $token;
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, Schedule $schedule): RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -59,11 +60,13 @@ class RegisteredUserController extends Controller
         $mailData = [
             'name' => $request->name,
         ];
+
         event(new Registered($user));
 
         Auth::login($user);
 
         dispatch(new SendRegisterUserMail($request->email, $mailData));
+
         return redirect(RouteServiceProvider::HOME);
     }
 }

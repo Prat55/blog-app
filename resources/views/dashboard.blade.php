@@ -87,7 +87,7 @@
                             </p>
 
                             @php
-                                $time = $blog->updated_at->diffForHumans();
+                                $time = $blog->created_at->diffForHumans();
                             @endphp
                             <h6 class="mb-2 text-white text-end">-&nbsp;{{ $time }}</h6>
 

@@ -52,6 +52,56 @@ class BlogController extends Controller
         }
     }
 
+    protected function update($token, Request $request)
+    {
+        $blog = Blog::where('blog_uid', $token)->first();
+        if ($blog->userID == Auth::user()->userID) {
+            $request->validate([
+                'blog_new_title' => 'max:198|min:5',
+                'blog_cover_img' => 'max:7500|mimes:png,jpg,jpeg,gif,svg',
+                'description' => 'min:150',
+            ]);
+
+            if ($request->hasFile('blog_cover_img')) {
+
+                //? Deleting previous image
+                if (!empty($blog->cover_img)) {
+                    if (file::exists("books/" . $blog->cover_img)) {
+                        File::delete("books/" . $blog->cover_img);
+                    }
+                }
+
+                // ? Adding new image
+                $blogCover = $request->file('blog_cover_img');
+                $blogCoverName = time() . '_' . $blogCover->getClientOriginalName();
+                $blogCover->move(\public_path("blog_images/"), $blogCoverName);
+
+                $blog->blog_title = $request->blog_new_title;
+                $blog->cover_img = $blogCoverName;
+                $blog->blog_description = $request->description;
+
+                $blog->update();
+
+                if ($blog) {
+                    return Redirect::back();
+                } else {
+                    return abort(404);
+                }
+            } else {
+                $blog->blog_title = $request->blog_new_title;
+                $blog->blog_description = $request->description;
+
+                $blog->update();
+
+                if ($blog) {
+                    return Redirect::back();
+                } else {
+                    return abort(404);
+                }
+            }
+        }
+    }
+
     protected function destroy($uid)
     {
         $blog = Blog::where('blog_uid', $uid)->first();
@@ -70,10 +120,6 @@ class BlogController extends Controller
     protected function read_more($uid)
     {
         $blog = Blog::where('blog_uid', $uid)->first();
-        if ($blog->userID === Auth::user()->userID) {
-            return view('blog.read-more', compact('blog'));
-        } else {
-            return Redirect::route('dashboard')->with('error', "You don't have access to do this!");
-        }
+        return view('read-more.read-more', compact('blog'));
     }
 }

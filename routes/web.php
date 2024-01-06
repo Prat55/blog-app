@@ -18,8 +18,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    $blogs = Blog::latest()->get();
+    $populars = Blog::where('type', 'popular')->latest();
+    return view('welcome', compact('blogs', 'populars'));
+})->name('blog.home');
 
 Route::get('/dashboard', function () {
     $blogs = Blog::where('userID', Auth::user()->userID)->latest()->paginate(9);
@@ -30,10 +32,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
+    Route::post('/change-profile/{uid}', [ProfileController::class, 'change_profile']);
+    Route::delete('/profile/image/remove/{uid}', [ProfileController::class, 'remove_profile']);
 
     // ? Blog routes
     Route::post('/add-blog', [BlogController::class, 'addBlog'])->name('blog.add');
+    Route::put('/blog/update/{token}', [BlogController::class, 'update']);
     Route::get('/blog/full/{token}', [BlogController::class, 'read_more']);
     Route::delete('/blog/delete/{uid}', [BlogController::class, 'destroy']);
 });

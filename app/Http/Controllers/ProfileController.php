@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Blog;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -27,10 +31,9 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
+        $user = User::where('userID', Auth::user()->userID)->first();
+        $user->phone = $request->phone;
+        $user->update();
 
         $request->user()->save();
 
@@ -47,14 +50,84 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+        $blog = Blog::where('userID', $user->userID)->first();
+        if (file::exists("blog_images/" . $blog->cover_img)) {
+            File::delete("blog_images/" . $blog->cover_img);
+        }
+        $blog->delete();
+
+        if (!empty($user->profile_img)) {
+            if (file::exists("profile_img/" . $user->profile_img)) {
+                File::delete("profile_img/" . $user->profile_img);
+            }
+        }
 
         Auth::logout();
-
         $user->delete();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    protected function change_profile(Request $request, $uid)
+    {
+        $validator = Validator::make($request->all(), [
+            'profile_image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'errors' => $validator->messages(),
+            ]);
+        } else {
+            $user = User::where('userID', $uid)->first();
+
+            if (!empty($user->profile_img)) {
+                if (file::exists("profile_img/" . $user->profile_img)) {
+                    File::delete("profile_img/" . $user->profile_img);
+                }
+            }
+
+            // Store the new image in the database
+            $image = $request->file('profile_image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(\public_path("profile_img/"), $imageName);
+
+            if ($user) {
+                $user->profile_img = $imageName;
+                $user->update();
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Profile Picture Updated Successfully',
+                ]);
+            } else {
+
+                return response()->json([
+                    'status' => 404,
+                    'message' => "File Not Found",
+                ]);
+            }
+        }
+    }
+
+    protected function remove_profile($uid)
+    {
+        $user = User::where('userID', $uid)->first();
+        if (!empty($user->profile_img)) {
+            if (file::exists("profile_img/" . $user->profile_img)) {
+                File::delete("profile_img/" . $user->profile_img);
+            }
+
+            $user->profile_img = null;
+            $user->update();
+
+            return Redirect::back();
+        } else {
+            return Redirect::back()->with('error', 'Set your profile image first.');
+        }
     }
 }
