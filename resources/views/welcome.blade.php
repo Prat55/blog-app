@@ -13,7 +13,6 @@
                                 <span class="flex items-center gap-5">-&nbsp;
                                     {{ $time }}
 
-
                                     <div class="border border-white rounded-full w-[47px] h-[47px] overflow-hidden">
                                         <img src="/profile_img/{{ $blog->user->profile_img ?: 'profile.png' }}"
                                             alt="profile_image" class="w-full rounded-full" id="profile_image_preview2">
