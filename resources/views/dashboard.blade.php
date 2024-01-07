@@ -29,7 +29,7 @@
                                     Blog Title
                                 </label>
                                 <x-text-input id="blog_title" name="blog_title" type="text" class="block w-full"
-                                    placeholder="{{ __('Enter the title of blog') }}" />
+                                    placeholder="{{ __('Enter the title of blog') }}" value="{{ old('blog_title') }}" />
                                 <x-input-error :messages="$errors->get('blog_title')" class="mt-2" />
 
                                 {{-- ?Blog Description --}}
@@ -39,7 +39,7 @@
                                 </label>
                                 <textarea name="blog_description" id="blog_description" cols="30" rows="10"
                                     class="block w-full p-3 mt-1 mb-5 border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600"
-                                    placeholder="{{ __(' Write your thoughts here') }}"></textarea>
+                                    placeholder="{{ __(' Write your thoughts here') }}" value="{{ old('blog_description') }}"></textarea>
                                 <x-input-error :messages="$errors->get('blog_description')" class="mt-2" />
 
                                 {{-- ?Blog Cover Image --}}

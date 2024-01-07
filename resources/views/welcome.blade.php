@@ -17,6 +17,10 @@
                                             <img src="/profile_img/{{ $blog->user->profile_img ?: 'profile.png' }}"
                                                 alt="profile_image" class="w-full rounded-full"
                                                 id="profile_image_preview2">
+                                        @elseif (!empty($blog->user2->profile_img) && empty($blog->user->profile_img))
+                                            <img src="/profile_img/{{ $blog->user2->profile_img ?: 'profile.png' }}"
+                                                alt="profile_image" class="w-full rounded-full"
+                                                id="profile_image_preview2">
                                         @else
                                             <img src="/profile_img/profile.png" alt="profile_image"
                                                 class="w-full rounded-full" id="profile_image_preview2">

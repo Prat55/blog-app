@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Blog;
+use App\Models\DeletedUser;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,8 +33,13 @@ class ProfileController extends Controller
     {
         $request->user()->fill($request->validated());
         $user = User::where('userID', Auth::user()->userID)->first();
+        $user2 = DeletedUser::where('userID', Auth::user()->userID)->first();
+
         $user->phone = $request->phone;
         $user->update();
+
+        $user2->phone = $request->phone;
+        $user2->update();
 
         $request->user()->save();
 
@@ -50,17 +56,6 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
-        $blog = Blog::where('userID', $user->userID)->first();
-        if (file::exists("blog_images/" . $blog->cover_img)) {
-            File::delete("blog_images/" . $blog->cover_img);
-        }
-        $blog->delete();
-
-        if (!empty($user->profile_img)) {
-            if (file::exists("profile_img/" . $user->profile_img)) {
-                File::delete("profile_img/" . $user->profile_img);
-            }
-        }
 
         Auth::logout();
         $user->delete();
@@ -84,8 +79,9 @@ class ProfileController extends Controller
             ]);
         } else {
             $user = User::where('userID', $uid)->first();
+            $user2 = DeletedUser::where('userID', $uid)->first();
 
-            if (!empty($user->profile_img)) {
+            if (!empty($user->profile_img) && !empty($user2->profile_img)) {
                 if (file::exists("profile_img/" . $user->profile_img)) {
                     File::delete("profile_img/" . $user->profile_img);
                 }
@@ -98,7 +94,10 @@ class ProfileController extends Controller
 
             if ($user) {
                 $user->profile_img = $imageName;
+                $user2->profile_img = $imageName;
+
                 $user->update();
+                $user2->update();
 
                 return response()->json([
                     'status' => 200,
