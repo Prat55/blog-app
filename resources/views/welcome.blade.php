@@ -1,12 +1,11 @@
 <x-app-layout>
     <div class="flex flex-col justify-center w-full gap-10 overflow-hidden bg-white dark:bg-gray-900">
         <div class="py-5 md:px-[10%] flex md:justify-between gap-2 flex-col-reverse lg:flex-row px-4">
-            <div class="">
+            <div class="w-[70%]">
                 @forelse ($blogs as $blog)
                     <div class="flex">
                         <div class="p-4 mb-4 text-white bg-white rounded-lg shadow sm:p-8 dark:bg-gray-800">
-                            <div class="flex items-center justify-between">
-                                <h3 class="text-2xl font-bold">{{ $blog->blog_title }}</h3>
+                            <div class="flex items-center justify-end">
                                 @php
                                     $time = $blog->created_at->diffForHumans();
                                 @endphp
@@ -14,20 +13,34 @@
                                     {{ $time }}
 
                                     <div class="border border-white rounded-full w-[47px] h-[47px] overflow-hidden">
-                                        <img src="/profile_img/{{ $blog->user->profile_img ?: 'profile.png' }}"
-                                            alt="profile_image" class="w-full rounded-full" id="profile_image_preview2">
+                                        @if (!empty($blog->user->profile_img))
+                                            <img src="/profile_img/{{ $blog->user->profile_img ?: 'profile.png' }}"
+                                                alt="profile_image" class="w-full rounded-full"
+                                                id="profile_image_preview2">
+                                        @else
+                                            <img src="/profile_img/profile.png" alt="profile_image"
+                                                class="w-full rounded-full" id="profile_image_preview2">
+                                        @endif
                                     </div>
                                 </span>
                             </div>
-                            <div class="py-2 overflow-hidden shadow rounded-[10px] h-[200px]">
-                                <img src="/blog_images/{{ $blog->cover_img }}" alt="blog_images" class="">
-                            </div>
-                            <div class="py-2 h-[200px] overflow-hidden relative">
-                                <p class="text-justify">{{ $blog->blog_description }}</p>
-                                <div class="absolute top-0 flex items-end justify-end w-full h-full">
-                                    <span
-                                        class="text-white bg-transparent blur-sm">.&nbsp;&nbsp;.&nbsp;&nbsp;.&nbsp;</span>
+
+                            <div class="px-10 py-5">
+                                <div
+                                    class="overflow-hidden shadow rounded-[10px] h-[300px] flex justify-center items-center w-full object-cover">
+                                    <img src="/blog_images/{{ $blog->cover_img }}" alt="blog_images"
+                                        class="rounded-[15px]">
                                 </div>
+                            </div>
+
+                            <div class="pb-5">
+                                <div class="text-center">
+                                    <h3 class="text-2xl font-bold">{{ $blog->blog_title }}</h3>
+                                </div>
+                            </div>
+
+                            <div class="py-2 h-[100px] overflow-hidden relative">
+                                <p class="text-justify">{{ $blog->blog_description }}</p>
                             </div>
                             <a href="/blog/full/{{ $blog->blog_uid }}">
                                 <h5 class="pt-2 font-bold text-center capitalize">read full blog</h5>
@@ -42,7 +55,8 @@
                 @endforelse
             </div>
 
-            <div class="p-4 py-5 text-white bg-white rounded-lg shadow sm:p-8 dark:bg-gray-800 h-fit">
+            <div
+                class="p-4 py-5 text-white bg-white rounded-lg shadow sm:p-8 dark:bg-gray-800 h-fit w-[30%] overflow-hidden">
                 <h3 class="text-xl font-bold text-black dark:text-white">Our popular blogs</h3>
 
                 <div class="w-full">
@@ -60,8 +74,8 @@
                             </div>
                         </a>
                     @empty
-                        <div class="w-[200px] overflow-hidden">
-                            <h4 class="w-[200px] text-center py-5">No popular blogs</h4>
+                        <div class="w-full overflow-hidden">
+                            <h4 class="w-full py-5 text-center">No popular blogs</h4>
                         </div>
                     @endforelse
                 </div>

@@ -20,4 +20,9 @@ class Blog extends Model
     {
         return $this->belongsTo(User::class, 'userID', 'userID');
     }
+
+    protected function user2()
+    {
+        return $this->belongsTo(DeletedUser::class, 'userID', 'userID');    
+    }
 }
