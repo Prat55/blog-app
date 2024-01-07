@@ -58,7 +58,7 @@ class BlogController extends Controller
         if ($blog->userID == Auth::user()->userID) {
             $request->validate([
                 'blog_new_title' => 'max:198|min:5',
-                'blog_cover_img' => 'max:7500|mimes:png,jpg,jpeg,gif,svg',
+                'blog_cover_img' => 'max:7500|mimes:png,jpg,jpeg,gif,svg,webp',
                 'description' => 'min:150',
             ]);
 
