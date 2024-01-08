@@ -26,8 +26,7 @@
 
         <div>
             <x-input-label for="phone" :value="__('Phone Number')" />
-            <x-text-input id="phone" name="phone" type="number" class="block w-full mt-1" :value="old('phone', $user->phone)"
-                required autocomplete="number" />
+            <x-text-input id="phone" name="phone" type="number" class="block w-full mt-1" :value="old('phone', $user->phone)" />
             <x-input-error class="mt-2" :messages="$errors->get('phone')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())

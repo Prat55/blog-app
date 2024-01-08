@@ -25,7 +25,8 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     $blogs = Blog::where('userID', Auth::user()->userID)->latest()->paginate(9);
-    return view('dashboard', compact('blogs'));
+    $allblogs = Blog::latest()->paginate(9);
+    return view('dashboard', compact('blogs', 'allblogs'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

@@ -35,10 +35,12 @@ class ProfileController extends Controller
         $user = User::where('userID', Auth::user()->userID)->first();
         $user2 = DeletedUser::where('userID', Auth::user()->userID)->first();
 
-        $user->phone = $request->phone;
+        $phone = $request->phone ?: null;
+
+        $user->phone =  $phone;
         $user->update();
 
-        $user2->phone = $request->phone;
+        $user2->phone =  $phone;
         $user2->update();
 
         $request->user()->save();

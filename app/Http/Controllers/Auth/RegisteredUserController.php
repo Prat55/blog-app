@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Str;
 
 class RegisteredUserController extends Controller
 {
@@ -41,33 +42,44 @@ class RegisteredUserController extends Controller
         return $token;
     }
 
-    public function store(Request $request, Schedule $schedule): RedirectResponse
+    protected function random_Number($user)
+    {
+        do {
+            $token = str_replace(' ', '', Str::lower($user)) . '_' . mt_rand(10000, 99999);
+        } while (User::where("name", "=", $token)->first());
+
+        return $token;
+    }
+
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:10', 'unique:' . User::class],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+
+        $username = $this->random_Number($request->name);
 
         $uid = $this->random_Token();
 
         $user = User::create([
             'userID' => $uid,
-            'name' => $request->name,
+            'name' => $username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
         $deleteUser = DeletedUser::create([
             'userID' => $uid,
-            'name' => $request->name,
+            'name' => $username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
         $deleteUser->save();
 
         $mailData = [
-            'name' => $request->name,
+            'name' => $username,
         ];
 
         event(new Registered($user));
