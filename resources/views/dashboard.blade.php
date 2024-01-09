@@ -67,8 +67,9 @@
             </div>
 
             {{-- ?Blogs --}}
-            <div class="w-full mt-[50px] flex md:gap-8 gap-4 flex-wrap md:justify-start justify-center">
-                @if (Auth::user()->role === 'admin')
+
+            @if (Auth::user()->role === 'admin')
+                <div class="w-full mt-[50px] flex md:gap-8 gap-4 flex-wrap md:justify-start justify-center">
                     @forelse ($allblogs as $blog)
                         <div
                             class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -108,8 +109,6 @@
                                     Delete &nbsp;
                                     <i class="fa fa-trash"></i>
                                 </button>
-
-
                             </div>
                         </div>
 
@@ -149,12 +148,108 @@
                                 </div>
                             </div>
                         </div>
+
                     @empty
-                        <div class="overflow-hidden text-white sm:rounded-lg">
-                            Write your first blog...
-                        </div>
+                        <div class="block overflow-hidden text-white sm:rounded-lg">
+                            No blogs added by users.
+                        </div><br>
                     @endforelse
-                @else
+                </div>
+
+                <div class="w-full mt-[50px] flex md:gap-8 gap-4 flex-wrap md:justify-start justify-center">
+                    @forelse ($users as $user)
+                        <div
+                            class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+
+                            <div class="p-5">
+                                <div class="flex items-center justify-center py-5">
+                                    <div class="border border-white rounded-full w-[47px] h-[47px] overflow-hidden">
+                                        <img src="/profile_img/{{ $user->profile_img ?: 'profile.png' }}"
+                                            alt="profile_image" class="w-full rounded-full" id="profile_image_preview2">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <span class="font-medium text-white">Username:&nbsp;</span>
+                                    <h5
+                                        class="inline-block mb-2 text-lg tracking-tight text-center text-gray-900 dark:text-white">
+                                        {{ $user->name }}
+                                    </h5><br>
+                                </div>
+                                <div>
+                                    <span class="font-medium text-white">Email:&nbsp;</span>
+                                    <h6 class="inline-block mb-2 text-center text-white">{{ $user->email }}</h6>
+                                </div>
+                                <div>
+                                    <span class="font-medium text-white">Email:&nbsp;</span>
+                                    <h6 class="inline-block mb-2 text-center text-white">{{ $user->email }}</h6>
+                                </div>
+                                <div>
+                                    <span class="font-medium text-white">Role:&nbsp;</span>
+                                    <h6 class="inline-block mb-2 text-center text-white uppercase">{{ $user->role }}
+                                    </h6>
+                                </div>
+
+                                @if ($user->status === 'active')
+                                    <button data-modal-target="delete-blog" data-modal-toggle="delete-blog"
+                                        class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-red-600 border border-transparent rounded-md hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+                                        type="button">
+                                        Ban &nbsp;
+                                        <i class="fa fa-user-slash"></i>
+                                    </button>
+                                @else
+                                    <form action="/user/unban/{{ $user->userID }}" method="post">
+                                        @csrf
+
+                                        <button type="submit"
+                                            class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-red-600 border border-transparent rounded-md hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                                            Unban &nbsp;
+                                            <i class="fa fa-user"></i>
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+                        </div>
+
+                        {{-- ? <!--Blog Delete modal --> --}}
+                        <div id="delete-blog" tabindex="-1" aria-hidden="true"
+                            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            <div class="relative w-full max-w-2xl max-h-full p-4">
+                                {{-- ! <!-- Modal content --> --}}
+                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                    {{-- ? <!-- Modal body --> --}}
+                                    <div class="p-4 space-y-4 md:p-5">
+                                        <form method="post" action="/user/ban/{{ $user->userID }}" class="p-6">
+                                            @csrf
+
+                                            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                                {{ __('Are you sure you want to ban this user ') . $user->name . '?' }}
+                                            </h2>
+
+                                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                                {{ __('Ban user cannot access to their account.') }}
+                                            </p>
+
+                                            <div class="flex justify-center mt-6">
+                                                <button data-modal-hide="delete-blog" type="button"
+                                                    class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-gray-700 uppercase transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 dark:border-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25">
+                                                    Cancel
+                                                </button>
+
+                                                <x-danger-button class="ms-3">
+                                                    {{ __('Confirm Ban') }}
+                                                </x-danger-button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                    @endforelse
+                </div>
+            @else
+                <div class="w-full mt-[50px] flex md:gap-8 gap-4 flex-wrap md:justify-start justify-center">
                     @forelse ($blogs as $blog)
                         <div
                             class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -240,12 +335,13 @@
                             Write your first blog...
                         </div>
                     @endforelse
-                @endif
-            </div>
-
-            <div class="mt-5">
-                {{ $blogs->links() }}
-            </div>
+                </div>
+            @endif
         </div>
+
+        <div class="mt-5">
+            {{ $blogs->links() }}
+        </div>
+    </div>
     </div>
 </x-app-layout>

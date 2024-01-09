@@ -4,7 +4,8 @@
             <div class="w-[70%]">
                 @forelse ($blogs as $blog)
                     <div class="flex">
-                        <div class="p-4 mb-4 text-white bg-white rounded-lg shadow sm:p-8 dark:bg-gray-800">
+                        <div
+                            class="px-2 py-4 mb-4 text-white bg-white rounded-lg shadow sm:px-3 sm:py-5 dark:bg-gray-800">
                             <div class="flex items-center justify-end">
                                 @php
                                     $time = $blog->created_at->diffForHumans();
@@ -29,7 +30,7 @@
                                 </span>
                             </div>
 
-                            <div class="px-10 py-5">
+                            <div class="w-full px-8 py-5 mt-2 bg-gray-400 rounded-xl dark:bg-gray-950">
                                 <div
                                     class="overflow-hidden shadow rounded-[10px] h-[300px] flex justify-center items-center w-full object-cover">
                                     <img src="/blog_images/{{ $blog->cover_img }}" alt="blog_images"

@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\blog\BlogController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Blog;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,10 +28,13 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     $blogs = Blog::where('userID', Auth::user()->userID)->latest()->paginate(9);
     $allblogs = Blog::latest()->paginate(9);
-    return view('dashboard', compact('blogs', 'allblogs'));
+    $users = \App\Models\User::latest()->paginate(9);
+
+    return view('dashboard', compact('blogs', 'allblogs', 'users'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -41,6 +46,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/blog/update/{token}', [BlogController::class, 'update']);
     Route::get('/blog/full/{token}', [BlogController::class, 'read_more']);
     Route::delete('/blog/delete/{uid}', [BlogController::class, 'destroy']);
+});
+
+Route::middleware('admin')->group(function () {
+    Route::post('/user/ban/{token}', [UserController::class, 'ban']);
+    Route::post('/user/unban/{token}', [UserController::class, 'unban']);
 });
 
 require __DIR__ . '/auth.php';

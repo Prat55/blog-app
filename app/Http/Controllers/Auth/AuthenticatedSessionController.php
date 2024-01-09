@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,11 +26,18 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $user = User::where('email', $request->loginName)->orWhere('name', $request->loginName)->first();
 
-        $request->session()->regenerate();
+        if ($user->status === 'active') {
+            $request->authenticate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+            $request->session()->regenerate();
+
+            return redirect()->intended(RouteServiceProvider::HOME);
+        } else {
+            Auth::logout();
+            return redirect()->route('login')->with('error', 'Your account has been banned by administrator!');
+        }
     }
 
     /**
