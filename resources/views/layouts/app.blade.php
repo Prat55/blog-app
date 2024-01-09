@@ -17,7 +17,7 @@
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
-
+    <link rel="stylesheet" href="{{ asset('assets/style.css') }}">
 
     <!-- Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>

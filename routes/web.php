@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\blog\BlogController;
+use App\Http\Controllers\blog\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Blog;
 use Illuminate\Support\Facades\Auth;
@@ -41,11 +42,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/change-profile/{uid}', [ProfileController::class, 'change_profile']);
     Route::delete('/profile/image/remove/{uid}', [ProfileController::class, 'remove_profile']);
 
-    // ? Blog routes
+    // ? Blog & comment routes
     Route::post('/add-blog', [BlogController::class, 'addBlog'])->name('blog.add');
     Route::put('/blog/update/{token}', [BlogController::class, 'update']);
     Route::get('/blog/full/{token}', [BlogController::class, 'read_more']);
     Route::delete('/blog/delete/{uid}', [BlogController::class, 'destroy']);
+    Route::post('/blog/comment', [CommentController::class, 'comment']);
+    Route::post('/comment/remove/{uid}', [CommentController::class, 'remove']);
 });
 
 Route::middleware('admin')->group(function () {

@@ -1,0 +1,23 @@
+.sended {
+    transition: 2s linear infinite;
+    animation: sended 2s linear infinite;
+}
+
+@keyframes sended {
+    0% {
+        top: 0;
+    }
+
+    50% {
+        transform: translate(50px, -50px);
+    }
+
+    70% {
+        transform: translate(-50px, 50px);
+        z-index: -100;
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}

@@ -37,16 +37,16 @@ class RegisteredUserController extends Controller
     {
         do {
             $token = substr(md5(mt_rand()), 0, 30);
-        } while (User::where("userID", "=", $token)->first());
+        } while (DeletedUser::where("userID", "=", $token)->first());
 
         return $token;
     }
 
-    protected function random_Number($user)
+    protected function random_Username($user)
     {
         do {
             $token = str_replace(' ', '', Str::lower($user)) . '_' . mt_rand(10000, 99999);
-        } while (User::where("name", "=", $token)->first());
+        } while (DeletedUser::where("name", "=", $token)->first());
 
         return $token;
     }
@@ -59,7 +59,7 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $username = $this->random_Number($request->name);
+        $username = $this->random_Username($request->name);
 
         $uid = $this->random_Token();
 

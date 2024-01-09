@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Blog extends Model
+class Comment extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'userID',
-        'blog_uid',
-        'blog_title',
-        'blog_description',
-        'cover_img',
+        'blog_id',
+        'comment_uid',
+        'comment',
     ];
 
     protected function user()
@@ -24,5 +24,10 @@ class Blog extends Model
     protected function user2()
     {
         return $this->belongsTo(DeletedUser::class, 'userID', 'userID');
+    }
+
+    protected function blog()
+    {
+        return $this->belongsTo(Blog::class, 'blog_uid', 'blog_id');
     }
 }

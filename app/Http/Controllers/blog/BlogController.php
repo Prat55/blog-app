@@ -4,6 +4,7 @@ namespace App\Http\Controllers\blog;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -105,7 +106,7 @@ class BlogController extends Controller
     protected function destroy($uid)
     {
         $blog = Blog::where('blog_uid', $uid)->first();
-        if ($blog->userID === Auth::user()->userID) {
+        if ($blog->userID === Auth::user()->userID || Auth::user()->role === 'admin') {
             if (file::exists("blog_images/" . $blog->cover_img)) {
                 File::delete("blog_images/" . $blog->cover_img);
             }
@@ -120,6 +121,7 @@ class BlogController extends Controller
     protected function read_more($uid)
     {
         $blog = Blog::where('blog_uid', $uid)->first();
-        return view('read-more.read-more', compact('blog'));
+        $comments = Comment::where('blog_id', $uid)->latest()->get();
+        return view('read-more.read-more', compact('blog', 'comments'));
     }
 }
