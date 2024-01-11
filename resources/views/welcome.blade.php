@@ -38,7 +38,7 @@
                                 </div>
                             </div>
 
-                            <div class="pb-5">
+                            <div class="py-5">
                                 <div class="text-center">
                                     <h3 class="text-2xl font-bold">{{ $blog->blog_title }}</h3>
                                 </div>

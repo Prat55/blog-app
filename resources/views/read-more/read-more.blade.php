@@ -97,7 +97,7 @@
             <div class="md:px-12 md:w-[70%] w-[80%] relative px-5">
                 <input type="text" name="comment" id="comment"
                     class="bg-white border border-t-0 border-b-2 border-l-0 border-r-0 outline-none sm:w-full w-[92%] dark:bg-transparent border-b-blue-500 focus:outline-none dark:text-white text-black"
-                    placeholder="Type your comment here&nbsp;.&nbsp;.&nbsp;.&nbsp;.">
+                    placeholder="Write your comment here&nbsp;.&nbsp;.&nbsp;.&nbsp;.">
 
                 <input type="hidden" name="blog-id" id="blog-id" value="{{ $blog->blog_uid }}">
 
