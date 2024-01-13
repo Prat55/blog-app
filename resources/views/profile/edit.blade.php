@@ -5,7 +5,6 @@
         </h2>
     </x-slot>
 
-
     <div class="py-12">
         <div class="px-4 mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
             <div class="flex flex-wrap items-center w-full p-5 bg-white rounded justify-evenly dark:bg-gray-800">
@@ -116,6 +115,42 @@
                     </section>
                 </div>
             @endif
+
+            <div class="w-1/2 p-4 bg-white shadow sm:p-8 dark:bg-gray-800 sm:rounded-lg">
+                <section>
+                    <div class="w-full " style="margin-bottom: 25px">
+                        <h3 class="text-white" style="font-size: 20px">2FA</h3>
+                    </div>
+
+                    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
+                        {{ __("It's give you more security for authentication. While logged in it asks for 5 digit otp which we will send you in your mail.") }}
+                    </div>
+
+                    <div class="flex items-center justify-between mt-4">
+                        @if (Auth::user()->twoFA == 0)
+                            <form method="post" action="{{ route('enable.2fa') }}">
+                                @csrf
+
+                                <div>
+                                    <x-primary-button>
+                                        {{ __('Enable 2FA') }}
+                                    </x-primary-button>
+                                </div>
+                            </form>
+                        @else
+                            <form method="post" action="{{ route('disable.2fa') }}">
+                                @csrf
+
+                                <div>
+                                    <x-primary-button>
+                                        {{ __('Disable 2FA') }}
+                                    </x-primary-button>
+                                </div>
+                            </form>
+                        @endif
+                    </div>
+                </section>
+            </div>
 
             <div class="p-4 bg-white shadow sm:p-8 dark:bg-gray-800 sm:rounded-lg">
                 <div class="max-w-xl">

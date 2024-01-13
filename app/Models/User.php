@@ -21,8 +21,17 @@ class User extends Authenticatable
         'userID',
         'name',
         'email',
+        'profile_img',
+        'role',
         'password',
+        'mode',
+        'phone',
+        'status',
+        'suspicious_count',
+        'twoFA',
+        'twofa_verify',
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.

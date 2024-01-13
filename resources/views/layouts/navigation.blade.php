@@ -31,22 +31,13 @@
                             class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md dark:text-gray-400 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">
                             <div class="border border-white rounded-full w-[47px] h-[47px] overflow-hidden">
                                 @if (Auth::check())
-                                    <img src="/profile_img/{{ Auth::user()->profile_img ?: 'profile.png' }}"
+                                    <img src="/profile_img/{{ Auth::user()->profile_img ?: 'profileDark.png' }}"
                                         alt="profile_image" class="w-full rounded-full" id="profile_image_preview2">
                                 @else
-                                    <img src="/profile_img/profile.png" alt="profile_image"
+                                    <img src="/profile_img/profileDark.png" alt="profile_image"
                                         class="w-full h-full rounded-full">
                                 @endif
                             </div>
-
-                            {{-- <div class="ms-1">
-                                <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd"
-                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </div> --}}
                         </button>
                     </x-slot>
 

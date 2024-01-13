@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('status')->default('active');
             $table->integer('suspicious_count')->default('0');
             $table->timestamp('email_verified_at')->nullable();
+            $table->boolean('twoFA')->default('0');
+            $table->string('twofa_verify')->default('unverified');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

@@ -3,10 +3,6 @@
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
                 <div class="relative p-6 text-gray-900 dark:text-gray-100">
-                    <div class="absolute text-green-600 right-[20px] top-7">
-                        @include('message')
-                    </div>
-
                     <p class="font-serif text-white bold">You want to share something&nbsp;.&nbsp;.&nbsp;.</p>
                     <x-primary-button x-data=""
                         x-on:click.prevent="$dispatch('open-modal', 'whats-new')">{{ __('New Blog') }}
@@ -103,7 +99,8 @@
                                     </svg>
                                 </a>
 
-                                <button data-modal-target="delete-blog" data-modal-toggle="delete-blog"
+                                <button data-modal-target="{{ $blog->blog_uid }}"
+                                    data-modal-toggle="{{ $blog->blog_uid }}"
                                     class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-red-600 border border-transparent rounded-md hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
                                     type="button">
                                     Delete &nbsp;
@@ -113,7 +110,7 @@
                         </div>
 
                         {{-- ? <!--Blog Delete modal --> --}}
-                        <div id="delete-blog" tabindex="-1" aria-hidden="true"
+                        <div id="{{ $blog->blog_uid }}" tabindex="-1" aria-hidden="true"
                             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                             <div class="relative w-full max-w-2xl max-h-full p-4">
                                 {{-- ! <!-- Modal content --> --}}
@@ -134,7 +131,7 @@
                                             </p>
 
                                             <div class="flex justify-center mt-6">
-                                                <button data-modal-hide="delete-blog" type="button"
+                                                <button data-modal-hide="{{ $blog->blog_uid }}" type="button"
                                                     class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-gray-700 uppercase transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 dark:border-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25">
                                                     Cancel
                                                 </button>
@@ -254,7 +251,8 @@
                                     </svg>
                                 </a>
 
-                                <button data-modal-target="delete-blog" data-modal-toggle="delete-blog"
+                                <button data-modal-target="{{ $blog->blog_uid }}"
+                                    data-modal-toggle="{{ $blog->blog_uid }}"
                                     class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-red-600 border border-transparent rounded-md hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
                                     type="button">
                                     Delete &nbsp;
@@ -266,7 +264,7 @@
                         </div>
 
                         {{-- ? <!--Blog Delete modal --> --}}
-                        <div id="delete-blog" tabindex="-1" aria-hidden="true"
+                        <div id="{{ $blog->blog_uid }}" tabindex="-1" aria-hidden="true"
                             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                             <div class="relative w-full max-w-2xl max-h-full p-4">
                                 {{-- ! <!-- Modal content --> --}}
@@ -287,7 +285,7 @@
                                             </p>
 
                                             <div class="flex justify-center mt-6">
-                                                <button data-modal-hide="delete-blog" type="button"
+                                                <button data-modal-hide="{{ $blog->blog_uid }}" type="button"
                                                     class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-gray-700 uppercase transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 dark:border-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25">
                                                     Cancel
                                                 </button>

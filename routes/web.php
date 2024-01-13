@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\blog\BlogController;
 use App\Http\Controllers\blog\CommentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TwoFA\TwoFA_Controller;
 use App\Models\Blog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -34,6 +36,9 @@ Route::get('/dashboard', function () {
     return view('dashboard', compact('blogs', 'allblogs', 'users'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('verification/{token}', [TwoFA_Controller::class, 'login_verification'])->name('login_verification');
+Route::post('verified/{token}', [AuthenticatedSessionController::class, 'login_2fa_verifiation'])->name('login.verified');
+
 Route::middleware('auth')->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -49,6 +54,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/blog/delete/{uid}', [BlogController::class, 'destroy']);
     Route::post('/blog/comment', [CommentController::class, 'comment']);
     Route::post('/comment/remove/{uid}', [CommentController::class, 'remove']);
+
+    // ? Two Factor Authentication routes
+    Route::post('/2FA/enable/request', [TwoFA_Controller::class, 'enable_request'])->name('enable.2fa');
+    Route::post('/2FA/disable/request', [TwoFA_Controller::class, 'disable_request'])->name('disable.2fa');
+    Route::get('/2FA/verification', [TwoFA_Controller::class, 'verification'])->name('verification');
+    Route::post('/2FA/verifying', [TwoFA_Controller::class, 'verify_otp'])->name('verifying.otp');
 });
 
 Route::middleware('admin')->group(function () {
