@@ -15,7 +15,7 @@
             </div>
 
             <div>
-                <form action="{{ route('login.verified', ['token' => $token]) }}" method="post">
+                <form action="{{ route('login.verified') }}" method="post">
                     @csrf
 
                     <div class="flex flex-col space-y-8">

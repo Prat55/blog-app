@@ -30,7 +30,7 @@
                                 </span>
                             </div>
 
-                            <div class="w-full px-8 py-5 mt-2 bg-gray-400 rounded-xl dark:bg-gray-950">
+                            <div class="w-full px-8 py-2 mt-2 rounded-xl">
                                 <div
                                     class="overflow-hidden shadow rounded-[10px] h-[300px] flex justify-center items-center w-full object-cover">
                                     <img src="/blog_images/{{ $blog->cover_img }}" alt="blog_images"
@@ -44,7 +44,7 @@
                                 </div>
                             </div>
 
-                            <div class="py-2 h-[100px] overflow-hidden relative">
+                            <div class="py-2 px-5 h-[100px] overflow-hidden relative">
                                 <p class="text-justify">{{ $blog->blog_description }}</p>
                             </div>
                             <a href="/blog/full/{{ $blog->blog_uid }}">

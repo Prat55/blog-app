@@ -92,9 +92,37 @@ class TwoFA_Controller extends Controller
         return redirect()->route('profile.edit')->with('success', 'Your two factor authentication is disabled');
     }
 
-    protected function login_verification(Request $request)
+    protected function login_verification()
     {
-        $token = $request->segment(2);
-        return view('2FA.login-2FA-otp', compact('token'));
+        return view('2FA.login-2FA-otp');
+    }
+
+    protected function login_verification_user(Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'char1' => 'required|max:1|min:1',
+            'char2' => 'required|max:1|min:1',
+            'char3' => 'required|max:1|min:1',
+            'char4' => 'required|max:1|min:1',
+            'char5' => 'required|max:1|min:1',
+        ]);
+
+        $userInputOpt = $request->char1 . $request->char2 . $request->char3 . $request->char4 . $request->char5;
+        $otp = TwofaOtp::where('otp', $userInputOpt)->where('userID', $user->userID)->first();
+
+        if ($otp) {
+            $userVerify = User::where('userID', $user->userID)->first();
+            $userVerify->twoFA = 1;
+            $userVerify->twofa_verify = 'verified';
+            $userVerify->update();
+            $otp->delete();
+
+            return redirect()->route('dashboard');
+        } else {
+            Auth::logout();
+            return redirect()->route('login')->with('error', 'You have entered wrong code! Please try again.');
+        }
     }
 }

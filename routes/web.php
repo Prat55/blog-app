@@ -7,6 +7,7 @@ use App\Http\Controllers\blog\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TwoFA\TwoFA_Controller;
 use App\Models\Blog;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
@@ -31,13 +32,12 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     $blogs = Blog::where('userID', Auth::user()->userID)->latest()->paginate(9);
     $allblogs = Blog::latest()->paginate(9);
-    $users = \App\Models\User::latest()->paginate(9);
+    $users = User::latest()->paginate(9);
 
-    return view('dashboard', compact('blogs', 'allblogs', 'users'));
+    return view('dashboard', compact('users', 'blogs', 'allblogs'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('verification/{token}', [TwoFA_Controller::class, 'login_verification'])->name('login_verification');
-Route::post('verified/{token}', [AuthenticatedSessionController::class, 'login_2fa_verifiation'])->name('login.verified');
+
 
 Route::middleware('auth')->group(function () {
 
@@ -58,8 +58,12 @@ Route::middleware('auth')->group(function () {
     // ? Two Factor Authentication routes
     Route::post('/2FA/enable/request', [TwoFA_Controller::class, 'enable_request'])->name('enable.2fa');
     Route::post('/2FA/disable/request', [TwoFA_Controller::class, 'disable_request'])->name('disable.2fa');
-    Route::get('/2FA/verification', [TwoFA_Controller::class, 'verification'])->name('verification');
+    Route::get('/2FA/verify', [TwoFA_Controller::class, 'verification'])->name('verification');
     Route::post('/2FA/verifying', [TwoFA_Controller::class, 'verify_otp'])->name('verifying.otp');
+
+    // ? User Two Factor Authentication
+    Route::get('/verify', [TwoFA_Controller::class, 'login_verification'])->name('login_verification');
+    Route::post('/verified', [TwoFA_Controller::class, 'login_verification_user'])->name('login.verified');
 });
 
 Route::middleware('admin')->group(function () {

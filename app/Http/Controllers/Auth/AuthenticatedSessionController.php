@@ -46,7 +46,6 @@ class AuthenticatedSessionController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect()->intended(RouteServiceProvider::HOME);
 
             if ($user->twoFA == 1) {
                 $otp = $this->otp();
@@ -64,7 +63,9 @@ class AuthenticatedSessionController extends Controller
 
                 Mail::to($user->email)->send(new TwoFaOtpMail($mailData));
 
-                return redirect()->route('login_verification', ['token' => $user->userID]);
+                return redirect()->route('login_verification');
+            } else {
+                return redirect()->intended(RouteServiceProvider::HOME);
             }
         } else {
             Auth::logout();
